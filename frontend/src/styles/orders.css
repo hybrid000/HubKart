@@ -1,0 +1,58 @@
+ .order-container {
+     margin-top: 1rem
+ }
+
+ .order {
+     max-width: 1000px;
+     margin: 0 auto;
+     margin-bottom: 1rem;
+     background-color: white;
+     border-bottom: 1px solid #ddd;
+     padding: 20px;
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+     border-radius: 5px;
+ }
+
+ .order h5 {
+     margin: 0;
+     margin-bottom: .5rem;
+     color: #333;
+ }
+
+ .orderbox {
+     padding: 10px;
+     background-color: #f9f9f9;
+     border-radius: 5px;
+     margin-top: 10px;
+ }
+
+ .orderbox h5 {
+     margin: 5px 0;
+     color: #555;
+ }
+
+ .address h6 {
+     margin: 5px 0;
+     color: #777;
+ }
+
+ .order-product {
+     padding-right: 25rem;
+     display: flex;
+     justify-content: space-between;
+ }
+
+ .payment-method {
+     margin-top: 10px;
+     color: #555;
+ }
+
+ .block:last-child {
+     border: none;
+ }
+
+ .order-img {
+     height: 6rem;
+     width: 6rem;
+ }
+

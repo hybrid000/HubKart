@@ -1,0 +1,174 @@
+.product-page {
+    display: flex;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: auto;
+    padding: 2rem 1rem;
+    background: #fff;
+}
+
+/* LEFT */
+.product-left {
+    width: 40%;
+    position: sticky;
+    top: 90px;
+}
+
+.main-image {
+    width: 100%;
+    height: 360px;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.thumbnail-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+}
+
+.thumbnail-row img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.thumbnail-row img.active {
+    border: 2px solid #000;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.2rem;
+}
+
+.cart-btn,
+.wishlist-btn {
+    flex: 1;
+    padding: 0.9rem;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.cart-btn {
+    background: #ff9f00;
+}
+
+.wishlist-btn {
+    background: #ffe6e6;
+}
+
+.login-hint {
+    font-size: 0.8rem;
+    color: #777;
+    margin-top: 0.5rem;
+}
+
+/* RIGHT */
+.product-right {
+    width: 60%;
+}
+
+.breadcrumb {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.product-title {
+    font-size: 1.6rem;
+    margin-bottom: 0.6rem;
+}
+
+.price-box {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.6rem;
+}
+
+.price {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.discount {
+    color: #0a7a2f;
+    font-weight: 600;
+}
+
+.rating-info {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 0.6rem;
+}
+
+.shipping {
+    color: #0a7a2f;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.offer-list {
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+.description {
+    margin-bottom: 1.5rem;
+}
+
+/* REVIEWS */
+.review-section textarea {
+    width: 100%;
+    height: 100px;
+    resize: none;
+    padding: 0.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.review-btn {
+    width: 100%;
+    padding: 0.7rem;
+    border: none;
+    background: #ddd;
+    cursor: not-allowed;
+}
+
+.review-card {
+    border-top: 1px solid #ddd;
+    padding: 0.6rem 0;
+}
+
+.review-user {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.no-reviews {
+    color: #666;
+}
+
+/* STATES */
+.product-loading,
+.product-error {
+    padding: 2rem;
+    text-align: center;
+}
