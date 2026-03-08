@@ -1,16 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
 import App from "./App";
-import "./styles/main.css"; // Global CSS for body, reset, fonts
+import { BrowserRouter } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
+import { AuthProvider } from "./context/AuthContext";
+import "./styles/main.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-    <BrowserRouter>
+    <HelmetProvider>
         <AuthProvider>
-            <App />
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
         </AuthProvider>
-    </BrowserRouter>
+    </HelmetProvider>
 );

@@ -1,0 +1,137 @@
+.wishlist-page {
+    max-width: 1200px;
+    margin: auto;
+    padding: 40px 20px;
+}
+
+.wishlist-page h1 {
+    margin-bottom: 30px;
+}
+
+/* GRID */
+
+.wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+/* CARD */
+
+.wishlist-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 16px;
+    transition: 0.2s;
+}
+
+.wishlist-card:hover {
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* IMAGE */
+
+.wishlist-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+/* TITLE */
+
+.wishlist-card h3 {
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+/* PRICE */
+
+.wishlist-price {
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+/* BUTTON CONTAINER */
+
+.wishlist-buttons {
+    display: flex;
+    gap: 2%;
+    width: 100%;
+
+}
+
+/* COMMON BUTTON STYLE */
+
+.wishlist-buttons button {
+    flex: 1;
+    height: 40px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s ease;
+  
+}
+
+/* ADD TO CART */
+
+.cart-btn {
+    border: none;
+    background: #111;
+    color: white;
+    margin: 0;
+    padding: 0;
+    width: 49%;
+}
+
+.cart-btn:hover {
+    background: #333;
+}
+
+/* REMOVE BUTTON */
+
+.remove-btn {
+    border: 1px solid #111;
+    background: white;
+        width: 48%;
+        margin: 0;
+            padding: 0;
+}
+
+.remove-btn:hover {
+    background: #f5f5f5;
+}
+
+/* EMPTY STATE */
+
+.wishlist-empty {
+    text-align: center;
+    padding: 80px;
+}
+
+.shop-btn {
+    margin-top: 15px;
+    padding: 12px 20px;
+    background: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* LOADING */
+
+.wishlist-loading {
+    text-align: center;
+    padding: 60px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+    .wishlist-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+}

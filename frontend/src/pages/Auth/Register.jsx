@@ -1,5 +1,5 @@
-import React, { useState, useContext, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import "./Auth.css";
 
@@ -8,18 +8,14 @@ const Register = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({});
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const otpRefs = useRef([]);
-
   /* ======================
-     FORM INPUT
+     FORM CHANGE
   ====================== */
 
   const handleChange = (e) => {
@@ -28,27 +24,6 @@ const Register = () => {
       [e.target.name]: e.target.value,
     });
   };
-
-  /* ======================
-     PASSWORD STRENGTH
-  ====================== */
-
-  const getPasswordStrength = (password) => {
-    if (!password) return "";
-
-    let score = 0;
-
-    if (password.length >= 8) score++;
-    if (/[A-Z]/.test(password)) score++;
-    if (/[0-9]/.test(password)) score++;
-    if (/[^A-Za-z0-9]/.test(password)) score++;
-
-    if (score <= 1) return "weak";
-    if (score === 2 || score === 3) return "medium";
-    return "strong";
-  };
-
-  const strength = getPasswordStrength(formData.password);
 
   /* ======================
      OTP TIMER
@@ -80,11 +55,6 @@ const Register = () => {
       return;
     }
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
     try {
       const res = await fetch("http://localhost:5000/auth/send-otp", {
         method: "POST",
@@ -109,37 +79,19 @@ const Register = () => {
   };
 
   /* ======================
-     OTP INPUT HANDLER
-  ====================== */
-
-  const handleOtpChange = (value, index) => {
-    if (!/^[0-9]?$/.test(value)) return;
-
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-
-    if (value && index < 5) {
-      otpRefs.current[index + 1].focus();
-    }
-  };
-
-  const otpCode = otp.join("");
-
-  /* ======================
      REGISTER
   ====================== */
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
-    if (otpCode.length !== 6) {
-      setError("Enter valid OTP");
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
       return;
     }
-
-    setLoading(true);
-    setError("");
 
     try {
       const res = await fetch("http://localhost:5000/auth/register", {
@@ -151,7 +103,7 @@ const Register = () => {
         body: JSON.stringify({
           ...formData,
           username: `${formData.firstName} ${formData.lastName}`,
-          otp: otpCode,
+          otp,
         }),
       });
 
@@ -180,7 +132,7 @@ const Register = () => {
   };
 
   return (
-    <div className="auth-container">
+    <div className="auth-page">
       <div className="auth-card">
         <h2>Create Account</h2>
 
@@ -193,53 +145,40 @@ const Register = () => {
             required
             onChange={handleChange}
           />
-          <input
-            name="lastName"
-            placeholder="Last Name"
-            required
-            onChange={handleChange}
-          />
 
-          <select name="gender" required onChange={handleChange}>
-            <option value="">Select Gender</option>
-            <option>Male</option>
-            <option>Female</option>
-            <option>Other</option>
-          </select>
+          <div className="auth-row">
+            <input
+              name="lastName"
+              placeholder="Last Name"
+              required
+              onChange={handleChange}
+            />
+
+            <select name="gender" onChange={handleChange} required>
+              <option value="">Gender</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </div>
 
           <input
             type="email"
             name="email"
-            placeholder="Email Address"
+            placeholder="Email"
             required
             onChange={handleChange}
           />
 
-          {/* PASSWORD */}
-          <div className="password-field">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              placeholder="Password"
-              required
-              minLength="8"
-              onChange={handleChange}
-            />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            minLength="8"
+            onChange={handleChange}
+          />
 
-            <span
-              className="toggle-password"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? "Hide" : "Show"}
-            </span>
-          </div>
-
-          {/* PASSWORD STRENGTH */}
-          {formData.password && (
-            <div className={`password-strength ${strength}`}>{strength}</div>
-          )}
-
-          {/* CONFIRM PASSWORD */}
           <input
             type="password"
             name="confirmPassword"
@@ -249,27 +188,23 @@ const Register = () => {
           />
 
           {/* SEND OTP */}
+
           {!otpSent && (
-            <button type="button" className="auth-btn" onClick={sendOTP}>
+            <button type="button" className="auth-button" onClick={sendOTP}>
               Send OTP
             </button>
           )}
 
-          {/* OTP INPUT */}
+          {/* OTP FIELD */}
+
           {otpSent && (
             <>
-              <div className="otp-container">
-                {otp.map((digit, index) => (
-                  <input
-                    key={index}
-                    type="text"
-                    maxLength="1"
-                    value={digit}
-                    ref={(el) => (otpRefs.current[index] = el)}
-                    onChange={(e) => handleOtpChange(e.target.value, index)}
-                  />
-                ))}
-              </div>
+              <input
+                placeholder="Enter OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                required
+              />
 
               {cooldown > 0 ? (
                 <p className="otp-timer">Resend OTP in {cooldown}s</p>
@@ -279,12 +214,16 @@ const Register = () => {
                 </button>
               )}
 
-              <button type="submit" className="auth-btn" disabled={loading}>
+              <button type="submit" className="auth-button" disabled={loading}>
                 {loading ? "Registering..." : "Verify & Register"}
               </button>
             </>
           )}
         </form>
+
+        <p className="auth-switch">
+          Already have an account? <Link to="/user/login">Login</Link>
+        </p>
       </div>
     </div>
   );

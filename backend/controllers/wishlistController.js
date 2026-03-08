@@ -1,95 +1,92 @@
-const User = require("../models/user")
-const mongoose = require("mongoose");
+const User = require("../models/user");
 
+/* =========================
+   GET WISHLIST
+========================= */
 
-const getWishlist = async (req, res) => {
+exports.getWishlist = async (req, res) => {
+
     try {
-     
-            const userId = req.user._id;
 
-            const foundUser = await User.findById(userId).populate({
-                path: 'wishlist',
-                model: 'Product',
+        const user = await User.findById(req.user.id)
+            .populate(
+                "wishlist",
+                "productName price discountedPrice images"
+            );
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
             });
+        }
 
-            const productsInWishlist = foundUser.wishlist;
-
-            // Map over products and include image paths
-            const productsWithImages = productsInWishlist.map(element => ({
-                ...element.toObject(),
-                imagePath: `/resources/products/${element._id}/img1.png`,
-            }));
-
-            // Respond with JSON data
-            res.status(200).json({ products: productsWithImages });
+        res.json({
+            wishlist: user.wishlist
+        });
 
     } catch (err) {
+
         console.error(err);
-        res.status(500).json({ message: 'Internal Server Error' });
+
+        res.status(500).json({
+            message: "Failed to fetch wishlist"
+        });
+
     }
+
 };
 
+/* =========================
+   TOGGLE WISHLIST
+========================= */
 
-const addToWishlist = async (req, res) => {
+exports.toggleWishlist = async (req, res) => {
+
     try {
-        if (req.isAuthenticated()) {
-            const userId = req.user._id;
-            const userFound = await User.findById(userId);
-            const productId = req.params.productId;
 
-            // Check if the product already exists in the wishlist
-            const isProductInWishlist = userFound.wishlist.includes(productId);
+        const user = await User.findById(req.user.id);
 
-            if (!isProductInWishlist) {
-                // If the product is not in the wishlist, add it
-                userFound.wishlist.push(productId)
-                await userFound.save();
-                res.json({ message: 'Product added to wishlist' });
-            }
-            else {
-                // If the product is already in the wishlist, remove it
-                await User.updateOne({ _id: userId }, { $pull: { wishlist: productId } }); // Fix: Use userFound instead of User
-                res.json({ message: 'Removed from wishlist' });
-            }
-        } else {
-
-            res.redirect('/user/login');
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
         }
-    } catch (error) {
-        console.error('Error adding/removing product to/from wishlist:', error);
-        res.status(500).send('Internal Server Error');
-    }
-};
 
-
-
-const wishlistCheck = async (req, res) => {
-
-    try {
-        const userId = req.user._id;
-        const user = await User.findById(userId);
         const productId = req.params.productId;
 
-        // Check if the product already exists in the wishlist
-        const isProductInWishlist = user.wishlist.includes(productId);
+        const index = user.wishlist.findIndex(
+            (item) => item.toString() === productId
+        );
 
-        console.log(isProductInWishlist)
+        let inWishlist;
 
-        // Return the result as JSON 
-        res.json({ isProductInWishlist });
+        if (index === -1) {
 
-    } catch (error) {
-        console.error('Error checking wishlist:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+            user.wishlist.push(productId);
+            inWishlist = true;
+
+        } else {
+
+            user.wishlist.splice(index, 1);
+            inWishlist = false;
+
+        }
+
+        await user.save();
+
+        res.json({
+            success: true,
+            inWishlist
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+            message: "Wishlist update failed"
+        });
+
     }
+
 };
-
-
-const deleteWishlist=async (req, res)=>{
-
-}
-
-
-
-
-module.exports={wishlistCheck,getWishlist, addToWishlist};

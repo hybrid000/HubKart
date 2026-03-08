@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');
 
+
+require("node:dns/promises").setServers(["1.1.1.1", "8.8.8.8"]);
+
 dotenv.config({ path: path.join(__dirname, '.env') });
 
 const connectDB = async () => {
@@ -15,6 +18,7 @@ const connectDB = async () => {
         console.log('✅ MongoDB Connected (Atlas)');
     } catch (error) {
         console.error('❌ MongoDB Connection Failed:', error.message);
+        console.log(process.env.MONGO_URI)
         process.exit(1);
     }
 };

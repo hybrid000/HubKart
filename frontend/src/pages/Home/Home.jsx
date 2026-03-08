@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
+import PageTitle from '../../components/common/PageTitle'
 import "./Home.css";
 
 const Home = () => {

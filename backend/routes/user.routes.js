@@ -1,39 +1,63 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const cartAndorderController = require("../controllers/cartController.js");
-const wishlistController = require("../controllers/wishlistController");
 const userController = require("../controllers/userController");
+const cartController = require("../controllers/cartController");
+const wishlistController = require("../controllers/wishlistController");
 
-const protect = require('../middlewares/auth');
+const protect = require("../middlewares/auth");
+
+/* =========================
+   PRODUCT STATUS
+========================= */
 
 router.get(
    "/product-status/:productId",
    protect,
-   userController.checkProductStatus
+   userController.getProductStatus
 );
 
+/* =========================
+   WISHLIST
+========================= */
+
+router.get(
+   "/wishlist",
+   protect,
+   wishlistController.getWishlist
+);
 router.post(
    "/wishlist/:productId",
    protect,
-   userController.toggleWishlist
+   wishlistController.toggleWishlist
 );
-// router.post('/cart/:productId', protect, cartAndorderController.addToCart);
-// router.get('/cart', protect, cartAndorderController.getCart);
-// router.patch('/updatecart/:productId', protect, cartAndorderController.updateCart);
-// router.delete('/deletecart/:productId', protect, cartAndorderController.deleteCartItem);
 
 /* =========================
-   USER WISHLIST
+   CART
 ========================= */
 
-router.get('/wishlist', protect, wishlistController.getWishlist);
-router.post('/wishlist/:productId', protect, wishlistController.addToWishlist);
+router.get(
+   "/cart",
+   protect,
+   cartController.getCart
+);
 
-/* =========================
-   USER ORDERS
-========================= */
+router.post(
+   "/cart/:productId",
+   protect,
+   cartController.addToCart
+);
 
-// router.get("/orders", protect, cartAndorderController.getOrders);
+router.patch(
+   "/cart/:productId",
+   protect,
+   cartController.updateCart
+);
+
+router.delete(
+   "/cart/:productId",
+   protect,
+   cartController.removeFromCart
+);
 
 module.exports = router;
